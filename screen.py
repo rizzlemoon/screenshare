@@ -4,8 +4,10 @@ import io
 import argparse
 
 app = flask.Flask(__name__)
-default_interval = 500
-
+conf = {
+    'interval': 500,
+    'prefix': ''
+}
 
 @app.route('/screen.png')
 def serve_pil_image():
@@ -17,19 +19,18 @@ def serve_pil_image():
 
 @app.route('/')
 def serve_img():
-    input_interval = flask.request.args.get("interval")
-    if input_interval:
-        try:
-            int(input_interval)
-        except:
-            input_interval = None    
-    return flask.render_template('screen.html', interval = input_interval or default_interval)
+    interval = flask.request.args.get('interval') or conf['interval']
+    return flask.render_template('screen.html', interval = interval, prefix = conf['prefix'])
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-p', '--port', type=int, dest='port', default=5000, required=False)
     parser.add_argument('-i', '--interval', type=int, dest='interval', default=500, required=False)
+    parser.add_argument('-P', '--prefix', type=str, dest='prefix', default='', required=False)
     args = parser.parse_args()
 
-    default_interval = args.interval
+    conf['interval'] = args.interval
+    conf['prefix'] = args.prefix
+    if args.prefix:
+        app.config['APPLICATION_ROOT'] = args.prefix
     app.run(host='0.0.0.0', port=args.port, debug=True)
