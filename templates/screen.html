@@ -3,7 +3,7 @@
         <script type="text/javascript">
             function reloadpic() {
                 document.images["screen"].src = "screen.png?random=" + new Date().getTime();
-                setTimeout("reloadpic();", 500);
+                setTimeout("reloadpic();", {{ interval }});
             }
             onload = reloadpic;
         </script>
