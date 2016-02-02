@@ -2,7 +2,7 @@
     <head>
         <script type="text/javascript">
             function reloadpic() {
-                document.images["screen"].src = "{{ prefix }}/screen.png?random=" + new Date().getTime();
+                document.images["screen"].src = "screen.png?random=" + new Date().getTime();
                 setTimeout("reloadpic();", {{ interval }});
             }
             onload = reloadpic;
